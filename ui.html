@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Optify - Instant Website Upgrade Intelligence</title>
+    <title>Optify - UI & Layout Analysis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -12,7 +12,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body data-page="overview">
+  <body data-page="ui">
     <div class="noise-overlay" aria-hidden="true"></div>
 
     <div class="app">
@@ -25,8 +25,8 @@
             using the latest methods
           </h1>
           <p>
-            Run a multi-signal audit to surface UI, speed, accessibility, SEO, and
-            conversion opportunities across every critical section.
+            UI diagnostics highlight layout clarity, hierarchy, component rhythm,
+            and visual cohesion across the entire page.
           </p>
         </div>
 
@@ -45,8 +45,8 @@
         </div>
 
         <nav class="nav">
-          <a class="nav-link active" href="index.html">Overview</a>
-          <a class="nav-link" href="ui.html">UI & Layout</a>
+          <a class="nav-link" href="index.html">Overview</a>
+          <a class="nav-link active" href="ui.html">UI & Layout</a>
           <a class="nav-link" href="speed.html">Speed</a>
           <a class="nav-link" href="accessibility.html">Accessibility</a>
           <a class="nav-link" href="seo.html">SEO</a>
@@ -56,82 +56,64 @@
 
         <div class="sidebar-footer">
           <span class="tag">Full-screen analysis suite</span>
-          <span class="tag">Multi-page insights</span>
+          <span class="tag">UI & layout focus</span>
         </div>
       </aside>
 
       <main class="content">
         <header class="page-header">
           <div>
-            <span class="eyebrow">Overview</span>
-            <h2>Performance Snapshot</h2>
+            <span class="eyebrow">UI & Layout</span>
+            <h2>Deep Dive Report</h2>
           </div>
           <div class="header-meta">
-            <span id="gradeBadge" class="badge">No score yet</span>
-            <span id="urlBadge" class="badge badge-outline">No URL</span>
+            <span id="detailGrade" class="badge">No score yet</span>
           </div>
         </header>
 
-        <section class="state-stack" data-state="idle" id="overviewStates">
+        <section class="state-stack" data-state="idle" id="detailStates">
           <div class="state-card" data-view="idle">
-            <h3>Run your first analysis</h3>
-            <p>
-              Paste a URL to create a full multi-page audit with UI, speed, SEO,
-              accessibility, and conversion guidance.
-            </p>
+            <h3>Run analysis from Overview</h3>
+            <p>Start an analysis on the overview page to unlock UI insights.</p>
           </div>
           <div class="state-card" data-view="loading">
-            <h3>Analyzing now</h3>
-            <p>We are crawling the page, mapping layout signals, and scoring key KPIs.</p>
+            <h3>Analyzing UI signals</h3>
+            <p>Mapping hierarchy, layout depth, and visual cadence.</p>
             <div class="loading-bars">
               <span></span><span></span><span></span><span></span>
             </div>
           </div>
           <div class="state-card" data-view="error">
             <h3>Analysis failed</h3>
-            <p id="errorMessage">We could not analyze this URL. Check the format and try again.</p>
+            <p id="detailErrorMessage">Please re-run the analysis.</p>
           </div>
           <div class="state-card" data-view="stale">
-            <h3>Analysis ready, but stale</h3>
-            <p>
-              This analysis is more than 24 hours old. Re-run for the freshest insights.
-            </p>
+            <h3>Results are stale</h3>
+            <p>Re-run analysis to refresh the UI assessment.</p>
           </div>
         </section>
 
-        <section class="grid-two">
-          <article class="card score-card">
-            <h3>Score Breakdown</h3>
-            <div id="scoreList" class="score-list" aria-live="polite"></div>
-          </article>
-
+        <section class="detail-grid">
           <article class="card">
-            <h3>Signal Map</h3>
-            <ul id="signalList" class="signal-list"></ul>
-          </article>
-        </section>
-
-        <section class="grid-two">
-          <article class="card">
-            <h3>Layout & Component Findings</h3>
-            <ul id="findingsList" class="findings"></ul>
+            <div class="detail-score">
+              <span id="detailScore">--</span>
+              <small>/100</small>
+            </div>
+            <p id="detailSummary">UI summary will appear here.</p>
+            <div id="detailBadges" class="header-meta"></div>
           </article>
           <article class="card">
-            <h3>Recommended Reordering Plan</h3>
-            <ol id="reorderPlan" class="reorder-plan"></ol>
+            <h3>Key UI risks</h3>
+            <ul id="detailRisks" class="findings"></ul>
           </article>
-        </section>
-
-        <section class="card">
-          <div class="prompt-heading">
-            <h3>AI Implementation Prompt</h3>
-            <button id="copyPromptBtn" type="button">Copy Prompt</button>
-          </div>
-          <textarea
-            id="promptOutput"
-            readonly
-            placeholder="Your generated AI prompt will appear here after analysis..."
-          ></textarea>
+          <article class="card">
+            <h3>Top layout fixes</h3>
+            <ol id="detailActions" class="reorder-plan"></ol>
+          </article>
+          <article class="card">
+            <h3>UI experiments</h3>
+            <ul id="detailExperiments" class="findings"></ul>
+          </article>
         </section>
       </main>
     </div>
