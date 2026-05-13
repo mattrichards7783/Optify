@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Optify - Instant Website Upgrade Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <main class="page">
+      <header class="hero card">
+        <span class="eyebrow">AI Design Optimizer</span>
+        <h1>
+          instantly upgrade your
+          <span class="cycler" aria-live="polite">website</span>
+          using the latest methods
+        </h1>
+        <p>
+          Scan any live URL and instantly get UX, speed, accessibility, SEO, and
+          conversion insights plus actionable layout reorder recommendations.
+        </p>
+
+        <div class="analyzer-input-wrap">
+          <label for="urlInput">Your URL goes here!</label>
+          <div class="input-shell">
+            <input
+              id="urlInput"
+              type="url"
+              placeholder="https://your-site.com"
+              autocomplete="off"
+            />
+            <span id="analysisStatus" class="status-pill">Waiting for URL</span>
+          </div>
+          <small>
+            Enter a full URL. Analysis starts automatically after a short pause.
+          </small>
+        </div>
+      </header>
+
+      <section class="results-grid">
+        <article class="card score-card">
+          <h2>Performance Snapshot</h2>
+          <div id="scoreList" class="score-list" aria-live="polite"></div>
+        </article>
+
+        <article class="card pattern-card">
+          <h2>Layout & Component Findings</h2>
+          <ul id="findingsList" class="findings"></ul>
+        </article>
+      </section>
+
+      <section class="card recommendation-card">
+        <h2>Recommended Reordering Plan</h2>
+        <ol id="reorderPlan" class="reorder-plan"></ol>
+      </section>
+
+      <section class="card prompt-card">
+        <div class="prompt-heading">
+          <h2>AI Implementation Prompt</h2>
+          <button id="copyPromptBtn" type="button">Copy Prompt</button>
+        </div>
+        <textarea
+          id="promptOutput"
+          readonly
+          placeholder="Your generated AI prompt will appear here after analysis..."
+        ></textarea>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
