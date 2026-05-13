@@ -42,15 +42,15 @@ body {
   min-height: 100vh;
   display: grid;
   grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
-  gap: 1.8rem;
-  padding: 2rem 3.2vw;
+  gap: 2.4rem;
+  padding: 2.4rem 3.8vw;
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
-  padding: 1.4rem;
+  gap: 1.6rem;
+  padding: 1.6rem;
   border-radius: var(--radius);
   background: linear-gradient(170deg, rgba(10, 14, 13, 0.98), rgba(6, 8, 8, 0.98));
   border: 1px solid rgba(49, 209, 120, 0.18);
@@ -59,15 +59,17 @@ body {
   position: sticky;
   top: 2rem;
   overflow: hidden;
+  overflow-y: auto;
 }
 
 .content {
   display: grid;
-  gap: 1.4rem;
-  padding-bottom: 2rem;
+  gap: 2rem;
+  padding-bottom: 3rem;
   overflow-y: auto;
   height: calc(100vh - 4rem);
-  padding-right: 0.5rem;
+  padding-right: 1rem;
+  scrollbar-gutter: stable;
 }
 
 .brand {
@@ -79,10 +81,9 @@ body {
   background: linear-gradient(135deg, rgba(14, 21, 20, 0.95), rgba(8, 12, 11, 0.95));
   border: 1px solid rgba(49, 209, 120, 0.14);
   border-radius: var(--radius);
-  padding: 1.3rem;
+  padding: 1.6rem;
   box-shadow: var(--shadow);
   backdrop-filter: blur(8px);
-  animation: fadeInUp 500ms ease both;
 }
 
 .brand::before {
@@ -116,7 +117,7 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(1.8rem, 4vw, 3.4rem);
+  font-size: clamp(1.6rem, 3.4vw, 3rem);
   max-width: 19ch;
 }
 
@@ -128,6 +129,7 @@ h2 {
   margin: 0;
   color: var(--text-dim);
   max-width: 68ch;
+  line-height: 1.5;
 }
 
 .cycler {
@@ -175,7 +177,7 @@ h2 {
   flex-wrap: wrap;
   gap: 0.6rem;
   border: 1px solid rgba(49, 209, 120, 0.36);
-  padding: 0.55rem;
+  padding: 0.65rem;
   border-radius: 14px;
   background: rgba(0, 0, 0, 0.44);
 }
@@ -355,7 +357,7 @@ input[type="url"]::placeholder {
 
 .grid-two {
   display: grid;
-  gap: 1.2rem;
+  gap: 1.6rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -364,15 +366,15 @@ input[type="url"]::placeholder {
   gap: 1rem;
 }
 
-.state-stack[data-state="ready"] {
-  display: none;
-}
-
 .state-card {
   padding: 1.2rem 1.4rem;
   border-radius: 16px;
   border: 1px solid rgba(49, 209, 120, 0.2);
   background: rgba(6, 10, 9, 0.55);
+  display: none;
+}
+
+.state-stack[data-state="ready"] .state-card {
   display: none;
 }
 
@@ -423,7 +425,7 @@ input[type="url"]::placeholder {
 
 .detail-grid {
   display: grid;
-  gap: 1.2rem;
+  gap: 1.6rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -500,7 +502,7 @@ small {
 @media (max-width: 900px) {
   .app {
     grid-template-columns: 1fr;
-    padding: 1.4rem;
+    padding: 1.6rem;
   }
 
   .sidebar,

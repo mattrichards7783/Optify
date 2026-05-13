@@ -149,9 +149,21 @@ function gradeFromScore(score) {
 function buildSignals(data) {
   const scores = data.scores || [];
   const responseTimeMs = data.responseTimeMs ?? 0;
+  const audits = data.lighthouse?.keyAudits || [];
+  const lcpAudit = audits.find((audit) => audit.id === "largest-contentful-paint");
+  const clsAudit = audits.find((audit) => audit.id === "cumulative-layout-shift");
+  const tbtAudit = audits.find((audit) => audit.id === "total-blocking-time");
+  const fcpAudit = audits.find((audit) => audit.id === "first-contentful-paint");
+  const auditLines = [];
+
+  if (fcpAudit?.displayValue) auditLines.push(`FCP: ${fcpAudit.displayValue}`);
+  if (lcpAudit?.displayValue) auditLines.push(`LCP: ${lcpAudit.displayValue}`);
+  if (tbtAudit?.displayValue) auditLines.push(`TBT: ${tbtAudit.displayValue}`);
+  if (clsAudit?.displayValue) auditLines.push(`CLS: ${clsAudit.displayValue}`);
 
   return [
     `Crawl response time: ${responseTimeMs}ms`,
+    ...auditLines,
     `UI score indicates a ${gradeFromScore(getScore(scores, "UI")).label.toLowerCase()} visual system.`,
     `Speed score suggests a ${gradeFromScore(getScore(scores, "Speed")).label.toLowerCase()} performance profile.`,
     `Accessibility score reflects a ${gradeFromScore(getScore(scores, "Accessibility")).label.toLowerCase()} baseline.`,
@@ -372,6 +384,9 @@ function renderPromptPage(data) {
 function applyStoredData() {
   const stored = getStoredAnalysis();
   if (!stored) {
+    if (analysisTimestamp) {
+      analysisTimestamp.textContent = "Enter a URL to begin analysis.";
+    }
     setState("idle");
     return;
   }

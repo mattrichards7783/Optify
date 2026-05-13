@@ -47,6 +47,107 @@ async function fetchWithTimeout(url, timeoutMs = 12000) {
   }
 }
 
+async function fetchPageSpeed(url, timeoutMs = 15000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const endpoint = new URL("https://www.googleapis.com/pagespeedonline/v5/runPagespeed");
+    endpoint.searchParams.set("url", url);
+    endpoint.searchParams.set("strategy", "desktop");
+    ["performance", "accessibility", "seo", "best-practices"].forEach((category) => {
+      endpoint.searchParams.append("category", category);
+    });
+
+    if (process.env.PSI_API_KEY) {
+      endpoint.searchParams.set("key", process.env.PSI_API_KEY);
+    }
+
+    const response = await fetch(endpoint.toString(), {
+      signal: controller.signal,
+      headers: {
+        "user-agent": "OptifyAnalyzer/1.0 (+https://vercel.com)",
+      },
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return await response.json();
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+function readAudit(lighthouse, auditId) {
+  const audit = lighthouse?.audits?.[auditId];
+  if (!audit) return null;
+
+  return {
+    id: auditId,
+    title: audit.title,
+    description: audit.description,
+    score: audit.score,
+    displayValue: audit.displayValue,
+  };
+}
+
+function extractLighthouseInsights(lighthouse) {
+  if (!lighthouse) return null;
+
+  const categories = lighthouse.categories || {};
+  const audits = lighthouse.audits || {};
+
+  const keyAudits = [
+    "first-contentful-paint",
+    "largest-contentful-paint",
+    "speed-index",
+    "total-blocking-time",
+    "interactive",
+    "cumulative-layout-shift",
+    "server-response-time",
+  ]
+    .map((id) => readAudit(lighthouse, id))
+    .filter(Boolean);
+
+  const opportunities = Object.values(audits)
+    .filter((audit) => audit?.details?.type === "opportunity")
+    .sort((a, b) => (b?.score ?? 0) - (a?.score ?? 0))
+    .slice(0, 6)
+    .map((audit) => ({
+      id: audit.id,
+      title: audit.title,
+      score: audit.score,
+      displayValue: audit.displayValue,
+    }));
+
+  const diagnostics = Object.values(audits)
+    .filter((audit) => audit?.scoreDisplayMode === "numeric")
+    .filter((audit) => typeof audit.score === "number" && audit.score < 0.9)
+    .slice(0, 6)
+    .map((audit) => ({
+      id: audit.id,
+      title: audit.title,
+      score: audit.score,
+      displayValue: audit.displayValue,
+    }));
+
+  return {
+    categories: {
+      performance: categories.performance?.score,
+      accessibility: categories.accessibility?.score,
+      seo: categories.seo?.score,
+      bestPractices: categories["best-practices"]?.score,
+    },
+    keyAudits,
+    opportunities,
+    diagnostics,
+  };
+}
+
 function scoreUi($) {
   const semantic = ["header", "main", "section", "article", "footer", "nav"].reduce(
     (sum, tag) => sum + $(tag).length,
@@ -219,12 +320,25 @@ function buildReorderSuggestions(layout, scores) {
   return suggestions;
 }
 
-function buildPrompt(url, scores, findings, reorder) {
+function buildPrompt(url, scores, findings, reorder, pageInfo, lighthouse) {
   const scoreLines = scores.map((s) => `- ${s.label}: ${s.value}/100`).join("\n");
   const findingLines = findings.map((f) => `- ${f}`).join("\n");
   const reorderLines = reorder.map((r, i) => `${i + 1}. ${r}`).join("\n");
+  const auditLines = (lighthouse?.keyAudits || [])
+    .map((audit) => `- ${audit.title}: ${audit.displayValue || "n/a"}`)
+    .join("\n");
+  const opportunityLines = (lighthouse?.opportunities || [])
+    .map((audit) => `- ${audit.title}${audit.displayValue ? ` (${audit.displayValue})` : ""}`)
+    .join("\n");
+  const pageLines = [
+    pageInfo?.title ? `- Title: ${pageInfo.title}` : null,
+    pageInfo?.metaDescription ? `- Meta description: ${pageInfo.metaDescription}` : null,
+    pageInfo?.h1 ? `- H1: ${pageInfo.h1}` : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
 
-  return `You are a senior SaaS UX designer and frontend engineer.\n\nAnalyze and redesign this website: ${url}\n\nCurrent scores:\n${scoreLines}\n\nLayout and component findings:\n${findingLines}\n\nRequired improvements:\n- Improve UI hierarchy, readability, and component consistency\n- Improve load performance and perceived speed\n- Improve accessibility and semantic HTML structure\n- Improve conversion through CTA placement and trust sequencing\n\nReordering and component plan to execute:\n${reorderLines}\n\nNow provide:\n1. A revised information architecture and section order.\n2. Component-by-component replacements and rationale.\n3. Updated copy examples for hero, feature cards, proof, pricing, and CTA.\n4. Technical implementation notes for HTML/CSS/JS changes.\n5. A prioritized execution checklist from highest to lowest impact.\n\nConstraints:\n- Keep it mobile-first and production-ready.\n- Maintain brand intent while modernizing the full UX.`;
+  return `You are a senior SaaS UX designer and frontend engineer.\n\nAnalyze and redesign this website: ${url}\n\nCurrent scores (audit data where available):\n${scoreLines}\n\nObserved page metadata:\n${pageLines || "- Not detected"}\n\nLayout and component findings from HTML scan:\n${findingLines}\n\nPerformance & UX audit signals:\n${auditLines || "- Audit data unavailable"}\n\nTop performance opportunities:\n${opportunityLines || "- Opportunities unavailable"}\n\nReordering and component plan to execute:\n${reorderLines}\n\nRequired improvements:\n- Improve UI hierarchy, readability, and component consistency\n- Improve load performance and perceived speed\n- Improve accessibility and semantic HTML structure\n- Improve conversion through CTA placement and trust sequencing\n\nNow provide:\n1. A revised information architecture and section order.\n2. Component-by-component replacements and rationale.\n3. Updated copy examples for hero, feature cards, proof, pricing, and CTA.\n4. Technical implementation notes for HTML/CSS/JS changes.\n5. A prioritized execution checklist from highest to lowest impact.\n\nConstraints:\n- Keep it mobile-first and production-ready.\n- Maintain brand intent while modernizing the full UX.`;
 }
 
 module.exports = async (req, res) => {
@@ -250,17 +364,48 @@ module.exports = async (req, res) => {
 
     const $ = cheerio.load(fetched.html);
 
+    const lighthouseRaw = await fetchPageSpeed(fetched.finalUrl);
+    const lighthouse = extractLighthouseInsights(lighthouseRaw?.lighthouseResult);
+
+    const pageInfo = {
+      title: $("title").text().trim() || "",
+      metaDescription: $("meta[name='description']").attr("content") || "",
+      h1: $("h1").first().text().trim() || "",
+    };
+
     const scores = [
       { label: "UI", value: scoreUi($) },
-      { label: "Speed", value: scoreSpeed(fetched.duration, fetched.contentLength, $) },
-      { label: "Accessibility", value: scoreAccessibility($) },
-      { label: "SEO", value: scoreSeo($) },
+      {
+        label: "Speed",
+        value: lighthouse?.categories?.performance
+          ? Math.round(lighthouse.categories.performance * 100)
+          : scoreSpeed(fetched.duration, fetched.contentLength, $),
+      },
+      {
+        label: "Accessibility",
+        value: lighthouse?.categories?.accessibility
+          ? Math.round(lighthouse.categories.accessibility * 100)
+          : scoreAccessibility($),
+      },
+      {
+        label: "SEO",
+        value: lighthouse?.categories?.seo
+          ? Math.round(lighthouse.categories.seo * 100)
+          : scoreSeo($),
+      },
       { label: "Conversion", value: scoreConversion($) },
     ];
 
     const layout = detectLayout($);
     const reorderSuggestions = buildReorderSuggestions(layout, scores);
-    const prompt = buildPrompt(fetched.finalUrl, scores, layout.findings, reorderSuggestions);
+    const prompt = buildPrompt(
+      fetched.finalUrl,
+      scores,
+      layout.findings,
+      reorderSuggestions,
+      pageInfo,
+      lighthouse,
+    );
 
     res.status(200).json({
       url: fetched.finalUrl,
@@ -269,6 +414,12 @@ module.exports = async (req, res) => {
       findings: layout.findings,
       reorderSuggestions,
       prompt,
+      pageInfo,
+      lighthouse,
+      analysisSources: {
+        lighthouse: Boolean(lighthouse),
+        htmlScan: true,
+      },
     });
   } catch (error) {
     res.status(500).json({

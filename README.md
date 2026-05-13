@@ -28,6 +28,13 @@ npm run dev
 - Recommends section reorder and component improvements.
 - Generates a ready-to-paste AI implementation prompt.
 
+## Real Audit Data
+
+The API can use Google PageSpeed Insights for real performance, accessibility,
+and SEO scores. Set `PSI_API_KEY` in Vercel (or your local env) to increase
+quota reliability. Without a key, the endpoint still works but may be rate
+limited.
+
 ## Deploy To Vercel
 
 ### Option A: Dashboard (recommended)
