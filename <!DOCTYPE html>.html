@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optify - Website Optimisation Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #000000;
+      overflow-x: hidden;
+    }
+
+    .glow {
+      box-shadow: 0 0 40px rgba(34,197,94,0.25);
+    }
+
+    .glass {
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .gradient-text {
+      background: linear-gradient(to right, #ffffff, #22c55e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .progress-bar {
+      transition: width 0.5s ease;
+    }
+
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen">
+
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-[-120px] left-[-120px] w-96 h-96 bg-green-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-[-150px] right-[-120px] w-[450px] h-[450px] bg-green-500/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <nav class="relative z-10 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
+    <div class="flex items-center gap-3">
+      <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-xl font-bold glow">
+        O
+      </div>
+      <div>
+        <h1 class="text-2xl font-extrabold">Optify</h1>
+        <p class="text-xs text-gray-400">Website Optimisation Platform</p>
+      </div>
+    </div>
+
+    <div class="hidden md:flex items-center gap-8 text-sm text-gray-300">
+      <a href="#features" class="hover:text-white transition">Features</a>
+      <a href="#dashboard" class="hover:text-white transition">Dashboard</a>
+      <a href="#pricing" class="hover:text-white transition">Pricing</a>
+    </div>
+  </nav>
+
+  <section class="relative z-10 px-6 pt-12 pb-24 max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-4 py-2 text-sm text-green-400 mb-6">
+          ⚡ Real-Time Website Performance Analysis
+        </div>
+
+        <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
+          Optimise Your
+          <span class="gradient-text">Website</span>
+          In Seconds
+        </h1>
+
+        <p class="text-lg text-gray-400 leading-relaxed max-w-xl mb-8">
+          Analyse your website performance, SEO, accessibility, mobile responsiveness, and loading speed with Optify's intelligent optimisation engine.
+        </p>
+
+        <div class="glass rounded-3xl p-5 glow max-w-2xl">
+          <div class="flex flex-col md:flex-row gap-4">
+            <input
+              id="websiteInput"
+              type="text"
+              placeholder="Enter your website URL..."
+              class="flex-1 bg-gray-900/70 border border-gray-700 rounded-2xl px-5 py-4 outline-none focus:border-green-500 transition text-white"
+            />
+
+            <button
+              onclick="analyzeWebsite()"
+              class="bg-gradient-to-r from-green-500 to-green-700 hover:opacity-90 transition rounded-2xl px-8 py-4 font-semibold text-white glow"
+            >
+              Analyse Site
+            </button>
+          </div>
+
+          <div id="loadingContainer" class="hidden mt-6">
+            <div class="flex items-center justify-between mb-2 text-sm text-gray-300">
+              <span>Analysing website...</span>
+              <span id="progressText">0%</span>
+            </div>
+
+            <div class="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+              <div id="progressBar" class="progress-bar h-full bg-gradient-to-r from-green-500 to-green-700 rounded-full" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="floating">
+        <div class="glass rounded-[2rem] p-8 glow">
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <p class="text-gray-400 text-sm">Performance Score</p>
+              <h2 class="text-5xl font-extrabold text-green-400">96</h2>
+            </div>
+
+            <div class="w-24 h-24 rounded-full border-[10px] border-green-400 flex items-center justify-center text-2xl font-bold">
+              A+
+            </div>
+          </div>
+
+          <div class="space-y-5">
+            <div>
+              <div class="flex justify-between mb-2 text-sm">
+                <span>SEO</span>
+                <span>98%</span>
+              </div>
+              <div class="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div class="h-full bg-green-400 rounded-full w-[98%]"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-2 text-sm">
+                <span>Accessibility</span>
+                <span>94%</span>
+              </div>
+              <div class="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 rounded-full w-[94%]"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-2 text-sm">
+                <span>Speed</span>
+                <span>92%</span>
+              </div>
+              <div class="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div class="h-full bg-green-600 rounded-full w-[92%]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dashboard" class="relative z-10 px-6 pb-24 max-w-7xl mx-auto hidden" style="display: none;" >
+    <div id="results" class="fade-in">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-10">
+        <div>
+          <p class="text-green-400 mb-2">Analysis Complete</p>
+          <h2 id="analysedSite" class="text-4xl font-extrabold mb-2"></h2>
+          <p class="text-gray-400">Website optimisation insights and recommendations.</p>
+        </div>
+
+        <div class="glass rounded-3xl px-8 py-6 text-center">
+          <p class="text-gray-400 text-sm mb-1">Overall Score</p>
+          <h3 id="overallScore" class="text-6xl font-extrabold gradient-text">95</h3>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
+        <div class="glass rounded-3xl p-6">
+          <div class="text-4xl mb-4">⚡</div>
+          <p class="text-gray-400 text-sm mb-1">Performance</p>
+          <h3 id="performanceScore" class="text-4xl font-bold">94</h3>
+        </div>
+
+        <div class="glass rounded-3xl p-6">
+          <div class="text-4xl mb-4">🔍</div>
+          <p class="text-gray-400 text-sm mb-1">SEO Score</p>
+          <h3 id="seoScore" class="text-4xl font-bold">97</h3>
+        </div>
+
+        <div class="glass rounded-3xl p-6">
+          <div class="text-4xl mb-4">📱</div>
+          <p class="text-gray-400 text-sm mb-1">Mobile Ready</p>
+          <h3 id="mobileScore" class="text-4xl font-bold">91</h3>
+        </div>
+
+        <div class="glass rounded-3xl p-6">
+          <div class="text-4xl mb-4">♿</div>
+          <p class="text-gray-400 text-sm mb-1">Accessibility</p>
+          <h3 id="accessibilityScore" class="text-4xl font-bold">96</h3>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8 mb-10">
+        <div class="glass rounded-3xl p-8">
+          <h3 class="text-2xl font-bold mb-6">Website Metrics</h3>
+
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="text-gray-300">Load Time</span>
+                <span id="loadTime">1.4s</span>
+              </div>
+              <div class="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+                <div id="loadBar" class="h-full bg-green-400 rounded-full"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="text-gray-300">Core Web Vitals</span>
+                <span id="vitals">95%</span>
+              </div>
+              <div class="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+                <div id="vitalsBar" class="h-full bg-green-500 rounded-full"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="text-gray-300">Security</span>
+                <span id="security">99%</span>
+              </div>
+              <div class="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+                <div id="securityBar" class="h-full bg-green-600 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl p-8">
+          <h3 class="text-2xl font-bold mb-6">Optimisation Recommendations</h3>
+
+          <div id="recommendations" class="space-y-4">
+          </div>
+        </div>
+      </div>
+
+      <div class="glass rounded-3xl p-8 overflow-hidden">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-2xl font-bold mb-1">Performance Timeline</h3>
+            <p class="text-gray-400">Estimated loading process</p>
+          </div>
+        </div>
+
+        <div class="flex items-end gap-4 h-64">
+          <div class="flex-1 bg-gradient-to-t from-green-700 to-green-500 rounded-t-2xl" style="height: 70%"></div>
+          <div class="flex-1 bg-gradient-to-t from-green-800 to-green-600 rounded-t-2xl" style="height: 90%"></div>
+          <div class="flex-1 bg-gradient-to-t from-green-700 to-green-400 rounded-t-2xl" style="height: 85%"></div>
+          <div class="flex-1 bg-gradient-to-t from-green-900 to-green-500 rounded-t-2xl" style="height: 95%"></div>
+          <div class="flex-1 bg-gradient-to-t from-green-800 to-green-300 rounded-t-2xl" style="height: 80%"></div>
+          <div class="flex-1 bg-gradient-to-t from-green-600 to-green-400 rounded-t-2xl" style="height: 92%"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="relative z-10 px-6 pb-24 max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="text-green-400 mb-3">Why Optify</p>
+      <h2 class="text-5xl font-extrabold mb-4">Everything You Need</h2>
+      <p class="text-gray-400 max-w-2xl mx-auto text-lg">
+        Advanced website optimisation tools built for developers, agencies, and business owners.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+      <div class="glass rounded-3xl p-8 hover:-translate-y-2 transition duration-300">
+        <div class="text-5xl mb-5">⚡</div>
+        <h3 class="text-2xl font-bold mb-3">Speed Insights</h3>
+        <p class="text-gray-400">Analyse loading performance and optimise Core Web Vitals.</p>
+      </div>
+
+      <div class="glass rounded-3xl p-8 hover:-translate-y-2 transition duration-300">
+        <div class="text-5xl mb-5">🔍</div>
+        <h3 class="text-2xl font-bold mb-3">SEO Analysis</h3>
+        <p class="text-gray-400">Improve rankings with actionable SEO recommendations.</p>
+      </div>
+
+      <div class="glass rounded-3xl p-8 hover:-translate-y-2 transition duration-300">
+        <div class="text-5xl mb-5">📱</div>
+        <h3 class="text-2xl font-bold mb-3">Mobile Ready</h3>
+        <p class="text-gray-400">Ensure your website performs perfectly across all devices.</p>
+      </div>
+
+      <div class="glass rounded-3xl p-8 hover:-translate-y-2 transition duration-300">
+        <div class="text-5xl mb-5">🛡️</div>
+        <h3 class="text-2xl font-bold mb-3">Security Checks</h3>
+        <p class="text-gray-400">Monitor HTTPS, security headers, and website safety metrics.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="relative z-10 px-6 pb-28 max-w-7xl mx-auto">
+    <div class="glass rounded-[2rem] p-10 md:p-14 text-center glow">
+      <p class="text-green-400 mb-3">Start Optimising Today</p>
+      <h2 class="text-5xl font-extrabold mb-5">Built For Modern Websites</h2>
+      <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
+        Analyse unlimited websites, improve performance, and get actionable optimisation recommendations with Optify.
+      </p>
+
+      <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="bg-gradient-to-r from-green-500 to-green-700 hover:opacity-90 transition rounded-2xl px-8 py-4 font-semibold text-white glow">
+        Analyse a Website
+      </button>
+    </div>
+  </section>
+
+  <script>
+    const recommendationsList = [
+      'Compress large images to improve page loading speed.',
+      'Enable browser caching for static assets.',
+      'Minify CSS and JavaScript files.',
+      'Reduce unused third-party scripts.',
+      'Optimise mobile responsiveness for smaller devices.',
+      'Improve accessibility labels for screen readers.',
+      'Use lazy loading for below-the-fold images.',
+      'Add meta descriptions to improve SEO rankings.'
+    ];
+
+    function random(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateRecommendations() {
+      const shuffled = [...recommendationsList].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 4);
+    }
+
+    function analyzeWebsite() {
+      const input = document.getElementById('websiteInput');
+      const url = input.value.trim();
+
+      if (!url) {
+        alert('Please enter a website URL.');
+        return;
+      }
+
+      const loadingContainer = document.getElementById('loadingContainer');
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
+
+      loadingContainer.classList.remove('hidden');
+
+      let progress = 0;
+
+      const interval = setInterval(() => {
+        progress += random(7, 18);
+
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+
+          setTimeout(() => {
+            displayResults(url);
+          }, 400);
+        }
+
+        progressBar.style.width = progress + '%';
+        progressText.innerText = progress + '%';
+      }, 180);
+    }
+
+    function displayResults(url) {
+      const dashboard = document.getElementById('dashboard');
+      dashboard.style.display = 'block';
+
+      const performance = random(88, 99);
+      const seo = random(85, 100);
+      const mobile = random(82, 98);
+      const accessibility = random(86, 99);
+
+      const overall = Math.round((performance + seo + mobile + accessibility) / 4);
+
+      document.getElementById('analysedSite').innerText = url;
+      document.getElementById('overallScore').innerText = overall;
+
+      document.getElementById('performanceScore').innerText = performance;
+      document.getElementById('seoScore').innerText = seo;
+      document.getElementById('mobileScore').innerText = mobile;
+      document.getElementById('accessibilityScore').innerText = accessibility;
+
+      const loadTime = (Math.random() * 2 + 0.6).toFixed(1);
+      document.getElementById('loadTime').innerText = loadTime + 's';
+
+      const vitals = random(88, 99);
+      const security = random(92, 100);
+
+      document.getElementById('vitals').innerText = vitals + '%';
+      document.getElementById('security').innerText = security + '%';
+
+      document.getElementById('loadBar').style.width = (100 - loadTime * 18) + '%';
+      document.getElementById('vitalsBar').style.width = vitals + '%';
+      document.getElementById('securityBar').style.width = security + '%';
+
+      const recommendationsContainer = document.getElementById('recommendations');
+      recommendationsContainer.innerHTML = '';
+
+      generateRecommendations().forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'bg-gray-900/60 border border-gray-800 rounded-2xl p-4 flex items-start gap-4';
+        div.innerHTML = `
+          <div class="text-xl">✨</div>
+          <p class="text-gray-300">${item}</p>
+        `;
+        recommendationsContainer.appendChild(div);
+      });
+
+      dashboard.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

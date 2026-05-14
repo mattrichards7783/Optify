@@ -16,35 +16,28 @@
     <div class="noise-overlay" aria-hidden="true"></div>
 
     <div class="app">
-      <aside class="sidebar">
-        <div class="brand">
-          <span class="eyebrow">Optify</span>
-          <h1>
-            instantly upgrade your
-            <span class="cycler" aria-live="polite">website</span>
-            using the latest methods
-          </h1>
-          <p>
-            Accessibility diagnostics spotlight semantic structure, labeling, and
-            inclusive UX patterns that impact compliance and usability.
-          </p>
+      <header class="topbar">
+        <div class="logo">
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" role="img" focusable="false">
+              <path
+                d="M6 16c0-5.5 4.5-10 10-10h10v10c0 5.5-4.5 10-10 10H6V16z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+              />
+              <path
+                d="M14 16h8"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          <span class="logo-text">optify</span>
         </div>
 
-        <div class="analyzer-input-wrap">
-          <label for="urlInput">Your URL goes here!</label>
-          <div class="input-shell">
-            <input
-              id="urlInput"
-              type="url"
-              placeholder="https://your-site.com"
-              autocomplete="off"
-            />
-            <span id="analysisStatus" class="status-pill">Waiting for URL</span>
-          </div>
-          <small id="analysisTimestamp">Enter a URL to begin analysis.</small>
-        </div>
-
-        <nav class="nav">
+        <nav class="nav nav-inline">
           <a class="nav-link" href="index.html">Overview</a>
           <a class="nav-link" href="ui.html">UI & Layout</a>
           <a class="nav-link" href="speed.html">Speed</a>
@@ -53,23 +46,35 @@
           <a class="nav-link" href="conversion.html">Conversion</a>
           <a class="nav-link" href="prompt.html">AI Prompt</a>
         </nav>
+      </header>
 
-        <div class="sidebar-footer">
-          <span class="tag">Full-screen analysis suite</span>
-          <span class="tag">Accessibility focus</span>
-        </div>
-      </aside>
-
-      <main class="content">
-        <header class="page-header">
-          <div>
-            <span class="eyebrow">Accessibility</span>
-            <h2>Deep Dive Report</h2>
-          </div>
-          <div class="header-meta">
+      <main class="main">
+        <section class="analysis-panel card">
+          <div class="analysis-header">
+            <div>
+              <span class="eyebrow">Accessibility</span>
+              <h2>Deep Dive Report</h2>
+            </div>
             <span id="detailGrade" class="badge">No score yet</span>
           </div>
-        </header>
+          <p>
+            Accessibility diagnostics spotlight semantic structure, labeling, and
+            inclusive UX patterns that impact compliance and usability.
+          </p>
+          <div class="analyzer-input-wrap">
+            <label for="urlInput">Your URL goes here!</label>
+            <div class="input-shell">
+              <input
+                id="urlInput"
+                type="url"
+                placeholder="https://your-site.com"
+                autocomplete="off"
+              />
+              <span id="analysisStatus" class="status-pill">Waiting for URL</span>
+            </div>
+            <small id="analysisTimestamp">Enter a URL to begin analysis.</small>
+          </div>
+        </section>
 
         <section class="state-stack" data-state="idle" id="detailStates">
           <div class="state-card" data-view="idle">
