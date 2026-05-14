@@ -151,6 +151,100 @@ body::after {
   backdrop-filter: blur(8px);
 }
 
+.link-grid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.link-card {
+  text-decoration: none;
+  color: inherit;
+  display: grid;
+  gap: 0.55rem;
+  padding: 1.3rem;
+  border-radius: 16px;
+  border: 1px solid rgba(49, 209, 120, 0.2);
+  background: rgba(6, 10, 9, 0.6);
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.link-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(49, 209, 120, 0.5);
+  background: rgba(8, 14, 12, 0.8);
+}
+
+.link-card h3 {
+  margin: 0;
+}
+
+.link-card p {
+  margin: 0;
+  color: #b9d6c8;
+}
+
+.link-meta {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #93cdb1;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.58rem 0.85rem;
+  border-radius: 11px;
+  text-decoration: none;
+  font-weight: 800;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.btn-primary {
+  border: 1px solid rgba(49, 209, 120, 0.55);
+  background: linear-gradient(135deg, #2cd37a, #1d9f5c);
+  color: #041008;
+}
+
+.btn-outline {
+  border: 1px solid rgba(49, 209, 120, 0.35);
+  background: rgba(4, 6, 6, 0.2);
+  color: #c7f4db;
+}
+
+.faq-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+}
+
+.faq-list details {
+  border: 1px solid rgba(49, 209, 120, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  background: rgba(5, 9, 8, 0.6);
+}
+
+.faq-list summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #d8f7e6;
+}
+
+.faq-list p {
+  margin: 0.6rem 0 0;
+  color: #bfd7cc;
+}
+
 .hero-split {
   display: grid;
   gap: 2rem;
@@ -723,6 +817,10 @@ small {
     grid-template-columns: 1fr;
   }
 
+  .link-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .score-item {
     grid-template-columns: 95px 1fr auto;
   }
@@ -736,6 +834,10 @@ small {
   .prompt-heading {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .link-grid {
+    grid-template-columns: 1fr;
   }
 }
 
