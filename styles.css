@@ -668,6 +668,21 @@ input[type="url"]::placeholder {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.prompt-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.prompt-reveal {
+  margin-top: 0.9rem;
+}
+
+.is-hidden {
+  display: none;
 }
 
 button {

@@ -110,7 +110,6 @@
           <a class="nav-link" href="accessibility.html">Accessibility</a>
           <a class="nav-link" href="seo.html">SEO</a>
           <a class="nav-link" href="conversion.html">Conversion</a>
-          <a class="nav-link" href="prompt.html">AI Prompt</a>
         </nav>
       </header>
 
@@ -284,13 +283,18 @@
         <section class="card">
           <div class="prompt-heading">
             <h3>AI Implementation Prompt</h3>
-            <button id="copyPromptBtn" type="button">Copy Prompt</button>
+            <div class="prompt-actions">
+              <button id="promptToggle" type="button">View AI Prompt</button>
+              <button id="copyPromptBtn" type="button" class="is-hidden">Copy Prompt</button>
+            </div>
           </div>
-          <textarea
-            id="promptOutput"
-            readonly
-            placeholder="Your generated AI prompt will appear here after analysis..."
-          ></textarea>
+          <div id="promptReveal" class="prompt-reveal is-hidden">
+            <textarea
+              id="promptOutput"
+              readonly
+              placeholder="Your generated AI prompt will appear here after analysis..."
+            ></textarea>
+          </div>
         </section>
       </main>
     </div>

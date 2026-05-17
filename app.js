@@ -19,6 +19,8 @@ const findingsList = document.getElementById("findingsList");
 const reorderPlan = document.getElementById("reorderPlan");
 const promptOutput = document.getElementById("promptOutput");
 const copyPromptBtn = document.getElementById("copyPromptBtn");
+const promptToggleBtn = document.getElementById("promptToggle");
+const promptReveal = document.getElementById("promptReveal");
 const signalList = document.getElementById("signalList");
 const gradeBadge = document.getElementById("gradeBadge");
 const urlBadge = document.getElementById("urlBadge");
@@ -32,8 +34,6 @@ const detailBadges = document.getElementById("detailBadges");
 const detailRisks = document.getElementById("detailRisks");
 const detailActions = document.getElementById("detailActions");
 const detailExperiments = document.getElementById("detailExperiments");
-const promptPageOutput = document.getElementById("promptPageOutput");
-const promptPageCopyBtn = document.getElementById("promptPageCopyBtn");
 
 let rotateIndex = 0;
 let analyzeTimer;
@@ -375,10 +375,13 @@ function renderDetail(data) {
   renderList(detailExperiments, profile.experiments);
 }
 
-function renderPromptPage(data) {
-  if (promptPageOutput) {
-    promptPageOutput.value = data?.prompt || "";
+function setPromptVisibility(isVisible) {
+  if (!promptReveal || !promptToggleBtn) return;
+  promptReveal.classList.toggle("is-hidden", !isVisible);
+  if (copyPromptBtn) {
+    copyPromptBtn.classList.toggle("is-hidden", !isVisible);
   }
+  promptToggleBtn.textContent = isVisible ? "Hide AI Prompt" : "View AI Prompt";
 }
 
 function applyStoredData() {
@@ -397,7 +400,7 @@ function applyStoredData() {
 
   renderOverview(stored);
   renderDetail(stored);
-  renderPromptPage(stored);
+  setPromptVisibility(false);
 }
 
 function performAnalysis(rawUrl) {
@@ -436,7 +439,7 @@ function performAnalysis(rawUrl) {
       setState("ready");
       renderOverview(data);
       renderDetail(data);
-      renderPromptPage(data);
+      setPromptVisibility(false);
     })
     .catch((error) => {
       updateStatus(error.message || "Analysis failed", true);
@@ -471,23 +474,9 @@ copyPromptBtn?.addEventListener("click", async () => {
   }
 });
 
-promptPageCopyBtn?.addEventListener("click", async () => {
-  const text = promptPageOutput?.value.trim();
-  if (!text) return;
-
-  try {
-    await navigator.clipboard.writeText(text);
-    const original = promptPageCopyBtn.textContent;
-    promptPageCopyBtn.textContent = "Copied";
-    setTimeout(() => {
-      promptPageCopyBtn.textContent = original;
-    }, 1200);
-  } catch {
-    promptPageCopyBtn.textContent = "Copy failed";
-    setTimeout(() => {
-      promptPageCopyBtn.textContent = "Copy Prompt";
-    }, 1200);
-  }
+promptToggleBtn?.addEventListener("click", () => {
+  const isHidden = promptReveal?.classList.contains("is-hidden");
+  setPromptVisibility(isHidden);
 });
 
 setActiveNav();
