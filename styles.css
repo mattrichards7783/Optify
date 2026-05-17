@@ -294,10 +294,12 @@ body[data-page="overview"] .hero-split::after {
 }
 
 h1,
-h2 {
+h2,
+h3 {
   margin: 0;
   font-family: "Space Grotesk", sans-serif;
   line-height: 1.08;
+  text-wrap: balance;
 }
 
 h1 {
@@ -309,11 +311,16 @@ h2 {
   font-size: clamp(1.15rem, 2vw, 1.5rem);
 }
 
+.hero-title {
+  max-width: 20ch;
+}
+
 .hero-subtitle {
   margin: 0;
   color: var(--text-dim);
   font-size: 1.02rem;
   line-height: 1.6;
+  max-width: 52ch;
 }
 
 .accent {
@@ -355,8 +362,13 @@ h2 {
   color: #96ffc5;
   text-shadow: 0 0 24px rgba(49, 209, 120, 0.45);
   display: inline-block;
-  min-width: 8.8ch;
+  min-width: 12ch;
+  white-space: nowrap;
   transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.title-cycler {
+  text-align: left;
 }
 
 .cycler.flip-out {

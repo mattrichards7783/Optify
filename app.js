@@ -1,10 +1,10 @@
 const rotatingTargets = [
-  "website",
-  "mobile app",
-  "landing page",
-  "checkout flow",
-  "dashboard",
-  "SaaS onboarding",
+  "Optimization",
+  "Performance",
+  "Conversion",
+  "Retention",
+  "Engagement",
+  "Velocity",
 ];
 
 const STORAGE_KEY = "optify:lastAnalysis";
