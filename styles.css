@@ -134,10 +134,10 @@ body::after {
 .hero-copy {
   display: grid;
   gap: 1.1rem;
-  padding: 2rem;
-  border-radius: calc(var(--radius) + 2px);
-  background: linear-gradient(140deg, rgba(8, 12, 11, 0.92), rgba(3, 4, 4, 0.92));
-  border: 1px solid rgba(49, 209, 120, 0.2);
+  padding: 0;
+  max-width: 720px;
+  background: transparent;
+  border: none;
 }
 
 .card {
@@ -249,11 +249,11 @@ body::after {
   grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
   position: relative;
-  padding: 2.4rem;
+  padding: clamp(2rem, 4vw, 3.2rem);
+  min-height: clamp(320px, 50vh, 520px);
   border-radius: calc(var(--radius) + 6px);
   overflow: hidden;
   background: #020303;
-  border: 1px solid rgba(49, 209, 120, 0.18);
 }
 
 body[data-page="overview"] .hero-split::before {
@@ -272,7 +272,7 @@ body[data-page="overview"] .hero-split::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(2, 3, 3, 0.55) 0%, rgba(2, 3, 3, 0.92) 70%);
+  background: linear-gradient(180deg, rgba(2, 3, 3, 0.18) 0%, rgba(2, 3, 3, 0.68) 60%, rgba(2, 3, 3, 0.98) 100%);
   z-index: 1;
 }
 
