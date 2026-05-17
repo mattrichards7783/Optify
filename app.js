@@ -343,6 +343,27 @@ function renderOverview(data) {
   }
 }
 
+function resetOverview() {
+  if (scoreList) scoreList.innerHTML = "";
+  if (signalList) signalList.innerHTML = "";
+  if (findingsList) findingsList.innerHTML = "";
+  if (reorderPlan) reorderPlan.innerHTML = "";
+  if (promptOutput) promptOutput.value = "";
+
+  if (gradeBadge) {
+    gradeBadge.textContent = "No score yet";
+    gradeBadge.dataset.tone = "";
+  }
+
+  if (urlBadge) {
+    urlBadge.textContent = "No URL";
+  }
+
+  if (analysisTimestamp) {
+    analysisTimestamp.textContent = "Enter a URL to begin analysis.";
+  }
+}
+
 function renderDetail(data) {
   if (!data) return;
 
@@ -375,6 +396,19 @@ function renderDetail(data) {
   renderList(detailExperiments, profile.experiments);
 }
 
+function resetDetail() {
+  if (detailScore) detailScore.textContent = "--";
+  if (detailGrade) {
+    detailGrade.textContent = "No score yet";
+    detailGrade.dataset.tone = "";
+  }
+  if (detailSummary) detailSummary.textContent = "Run analysis from Overview.";
+  if (detailBadges) detailBadges.innerHTML = "";
+  if (detailRisks) detailRisks.innerHTML = "";
+  if (detailActions) detailActions.innerHTML = "";
+  if (detailExperiments) detailExperiments.innerHTML = "";
+}
+
 function setPromptVisibility(isVisible) {
   if (!promptReveal || !promptToggleBtn) return;
   promptReveal.classList.toggle("is-hidden", !isVisible);
@@ -386,11 +420,22 @@ function setPromptVisibility(isVisible) {
 
 function applyStoredData() {
   const stored = getStoredAnalysis();
-  if (!stored) {
-    if (analysisTimestamp) {
-      analysisTimestamp.textContent = "Enter a URL to begin analysis.";
-    }
+  const currentInput = urlInput?.value.trim() || "";
+
+  if (!stored || currentInput === "") {
+    resetOverview();
+    resetDetail();
     setState("idle");
+    setPromptVisibility(false);
+    return;
+  }
+
+  const normalizedInput = normalizeUrl(currentInput);
+  if (!normalizedInput || normalizedInput !== stored.url) {
+    resetOverview();
+    resetDetail();
+    setState("idle");
+    setPromptVisibility(false);
     return;
   }
 
@@ -409,12 +454,18 @@ function performAnalysis(rawUrl) {
   if (normalized === "") {
     updateStatus("Waiting for URL");
     setState("idle");
+    resetOverview();
+    resetDetail();
+    setPromptVisibility(false);
     return;
   }
 
   if (!normalized) {
     updateStatus("Invalid URL", true);
     setState("error", "Please enter a valid URL.");
+    resetOverview();
+    resetDetail();
+    setPromptVisibility(false);
     return;
   }
 
@@ -475,6 +526,26 @@ copyPromptBtn?.addEventListener("click", async () => {
 });
 
 promptToggleBtn?.addEventListener("click", () => {
+  const stored = getStoredAnalysis();
+  const currentInput = urlInput?.value.trim() || "";
+  const normalizedInput = currentInput ? normalizeUrl(currentInput) : "";
+  const hasPrompt = Boolean(stored?.prompt && stored?.url && normalizedInput === stored.url);
+
+  if (!currentInput) {
+    updateStatus("Insert URL to view prompt");
+    setState("idle");
+    setPromptVisibility(false);
+    urlInput?.focus();
+    return;
+  }
+
+  if (!hasPrompt) {
+    updateStatus("Run analysis to view prompt");
+    setState("idle");
+    setPromptVisibility(false);
+    return;
+  }
+
   const isHidden = promptReveal?.classList.contains("is-hidden");
   setPromptVisibility(isHidden);
 });

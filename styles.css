@@ -46,17 +46,6 @@ body::after {
   z-index: -1;
 }
 
-body[data-page="overview"]::before {
-  background-image: url("assets/hero.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.9;
-}
-
-body[data-page="overview"]::after {
-  background: linear-gradient(135deg, rgba(2, 3, 3, 0.5) 0%, rgba(2, 3, 3, 0.92) 70%);
-}
 
 .noise-overlay {
   position: fixed;
@@ -259,6 +248,37 @@ body[data-page="overview"]::after {
   gap: 2rem;
   grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
+  position: relative;
+  padding: 2.4rem;
+  border-radius: calc(var(--radius) + 6px);
+  overflow: hidden;
+  background: #020303;
+  border: 1px solid rgba(49, 209, 120, 0.18);
+}
+
+body[data-page="overview"] .hero-split::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("assets/hero.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.92;
+  z-index: 0;
+}
+
+body[data-page="overview"] .hero-split::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(2, 3, 3, 0.55) 0%, rgba(2, 3, 3, 0.92) 70%);
+  z-index: 1;
+}
+
+.hero-split > * {
+  position: relative;
+  z-index: 2;
 }
 
 .eyebrow {
